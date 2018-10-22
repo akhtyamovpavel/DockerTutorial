@@ -1,0 +1,22 @@
+version: '3'
+services:
+  web:
+    build:
+      context: .
+      args:
+        gitcommithash: "db049716e42767d39961e95dd9696103dca813f1"
+    ports:
+      - "5000:5000"
+    depends_on:
+      - "redis"
+    command: ["./wait-for-it.sh", "redis:6379", "--", "python", "app.py"]
+  redis:
+    image: "redis:alpine"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 50M
+        reservations:
+          cpus: '0.25'
+          memory: 25M
